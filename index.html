@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+        <title>Civilization Simulator</title>
+
+        <link rel="stylesheet" href="assets/style.css">
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+    </head>
+    <body>
+        <div class="container py-5">
+            <div class="alert alert-danger text-center hide" role="alert" id="the-end-card">
+                <h2 class="fw-bold">You suck!</h2>
+                <p class="mb-0">Everyone in your civilization died.</p>
+            </div>
+            <div class="row">
+                <div class="col-lg-3 col-md-6 col-sm-12 mt-3">
+                    <div class="card h-100">
+                        <div class="card-header" style="padding: 30px 0px; background: linear-gradient(137deg, rgba(255,200,54,1) 0%, rgba(237,98,98,1) 100%);">
+                            <h1 class="text-center m-0 fw-bold" style="color: white;">Civilization Simulator</h1>
+                        </div>
+                        <div class="card-body">
+                            <div class="mb-3">
+                                <label class="form-label">Game speed</label>
+                                <input type="number" min="0.1" max="5" class="form-control" id="game-speed-input" value="1" placeholder="The speed the game updates" required>
+                            </div>
+                            <div>
+                                <label class="form-label">Birth chance</label>
+                                <div class="input-group">
+                                    <input type="number" min="0" max="100" class="form-control" name="birth-chance" id="birth-chance-input" value="30" placeholder="The chance a child will be born every update" required>
+                                    <span class="input-group-text">%</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-footer" style="padding-top: 1.25em; padding-bottom: 1.25em;">
+                            <button class="btn btn-success w-100" id="play-pause-btn" type="submit" onclick="startSimulation()">Start Civilization</button>
+                        </div>
+                    </div>  
+                </div>
+                <div class="col-lg-3 col-md-6 col-sm-12 mt-3">
+                    <div class="card h-100">
+                        <div class="card-header">
+                            <h5 class="text-left py-2 mb-0">Utilities</h5>
+                        </div>
+                        <div class="card-body" style="display: flex; flex-direction: column;">
+                            <!-- <div class="card h-100 mb-3" style="flex-grow: 1;">
+                                <div class="card-body" id="people-map-wrapper">
+                                    <canvas id="people-map"></canvas>
+                                </div>
+                            </div>   -->
+                            <div class="row">
+                                <div class="col-6" style="padding-right: 5px;">
+                                    <button class="btn btn-danger w-100 py-3" id="covid-19-btn" type="submit" disabled onclick="covid19()">Covid-19</button>
+                                </div>
+                                <div class="col-6" style="padding-left: 5px;">
+                                    <button class="btn btn-danger w-100 py-3" id="start-over-btn" type="submit" disabled onclick="resetSimulation()">Start over</button>
+                                </div>
+                                <div class="col-12 mt-2">
+                                    <button class="btn btn-outline-danger w-100 py-3" id="world-war-btn" type="submit" disabled onclick="worldWar()">Start a war</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>                    
+                </div>
+                <div class="col-lg-6 col-md-6 col-sm-12 mt-3">
+                    <div class="card h-100">
+                        <div class="card-header">
+                            <h5 class="text-left py-2 mb-0">Statistics</h5>
+                        </div>
+                        <div class="card-body" style="display: flex; flex-direction: column;">
+                            <div class="input-group mb-3">
+                                <span class="input-group-text">Years passed</span>
+                                <input type="number" class="form-control" id="years-passed-input" disabled>
+                            </div>
+                            <div class="input-group mb-3">
+                                <span class="input-group-text">Current population</span>
+                                <input type="number" class="form-control" id="current-population-input" disabled>
+                            </div>
+                            <div class="input-group mb-3">
+                                <span class="input-group-text">Current deaths</span>
+                                <input type="number" class="form-control" id="current-deaths-input" disabled>
+                            </div>
+                            <div style="flex-grow: 1;">
+                            </div>
+                            <div class="">
+                                <input type="text" class="form-control" id="updates-input" disabled>
+                            </div>
+                        </div>
+                    </div>                    
+                </div>
+                <!-- <div class="col-12 mt-3">
+                    <div class="card h-100">
+                        <div class="card-body" id="people-map-wrapper">
+                            <canvas id="people-map"></canvas>
+                        </div>
+                    </div>  
+                </div> -->
+            </div>
+        </div>
+    
+        <script src="assets/javascript/names.js"></script>
+        <script src="assets/javascript/main.js"></script>
+
+        <!-- <script>
+            // horrendous attempt at making a map
+            (function() {
+                const canvasWrapper = document.getElementById('people-map-wrapper')
+                const canvas = document.getElementById('people-map')
+                const ctx = canvas.getContext('2d')
+
+                window.addEventListener('resize', resizeCanvas, false)
+                        
+                function resizeCanvas() {
+                    canvas.width = canvasWrapper.offsetWidth-(16*2)
+                    canvas.height = canvasWrapper.offsetHeight
+
+                    drawStuff() 
+                }
+                
+                resizeCanvas()
+                        
+                function drawStuff() {
+                    let left = 0
+                    let top = 10
+
+                    ctx.font = "12px Arial";
+
+                    for (index in people) {
+                        if ((index + 1) % 19 == 0) {
+                            top *= 2
+                            left = 0
+                        } else {
+                        }
+
+                        ctx.fillText("•", left + index * 10, top);
+                    }
+                }
+            })()
+        </script> -->
+
+        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js" integrity="sha384-fbbOQedDUMZZ5KreZpsbe1LCZPVmfTnH7ois6mU1QK+m14rQ1l2bGBq41eYeM/fS" crossorigin="anonymous"></script>
+    </body>
+</html>
