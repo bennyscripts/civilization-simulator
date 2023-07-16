@@ -32,24 +32,27 @@
     }
 }
 
-input {
+input[type="text"],
+input[type="number"] {
     background-color: #2d2d2d!important;
     border: none!important;
     color: #fff!important
 }
 
-input:focus {
+input[type="text"]:focus,
+input[type="number"]:focus {
     box-shadow: none!important
 }
 
-input:read-only {
+input[type="text"]:read-only,
+input[type="number"]:read-only {
     background-color: #2d2d2d!important;
     border: none!important;
     color: #fff!important;
     opacity: 50%
 }
 
-.input-group-text{
+.input-group-text {
     background-color: #353535!important;
     border: none!important;
     color: white!important;

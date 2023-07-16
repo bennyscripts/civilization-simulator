@@ -39,12 +39,16 @@
                                 <label class="form-label">Game speed</label>
                                 <input type="number" min="0.1" max="5" class="form-control" id="game-speed-input" value="1" placeholder="The speed the game updates" required>
                             </div>
-                            <div>
+                            <div class="mb-3">
                                 <label class="form-label">Birth chance</label>
                                 <div class="input-group">
                                     <input type="number" min="0" max="100" class="form-control" name="birth-chance" id="birth-chance-input" value="30" placeholder="The chance a child will be born every update" required>
                                     <span class="input-group-text">%</span>
                                 </div>
+                            </div>
+                            <div class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox" role="switch" id="deadly-virus-input" checked>
+                                <label class="form-check-label">Deadly virus every 200 years</label>
                             </div>
                         </div>
                         <div class="card-footer" style="padding-top: 1.25em; padding-bottom: 1.25em;">
@@ -62,7 +66,7 @@
                             <div class="row">
                                 <div class="col-12">
                                     <div class="input-group mb-3">
-                                        <span class="input-group-text" style="background-color: #2d2d2d!important; padding-left: 20px;">Years passed</span>
+                                        <span class="input-group-text" style="background-color: #2d2d2d!important; padding-left: 20px; padding-right: 20px;">Years passed</span>
                                         <input type="text" class="form-control fw-bold" id="years-passed-input" disabled style="text-align: right; border-left: none; padding: 10px 25px; font-size: 1.5em;">
                                     </div>  
                                 </div>
@@ -117,7 +121,7 @@
                             <h5 class="text-left py-2 mb-0">Utilities</h5>
                         </div>
                         <div class="card-body" style="display: flex; flex-direction: column;">
-                            <div class="card mb-3" style="border: 0px solid transparent; height: 250px; overflow-y: scroll;">
+                            <div class="card mb-3" style="border: 0px solid transparent; height: 280px; overflow-y: hidden;">
                                 <ul class="list-group" id="updates-list">
                                     
                                 </ul>

@@ -2,6 +2,19 @@ const capitalizeStr = (string) => string.charAt(0).toUpperCase() + string.slice(
 const randomInt = (min, max) => Math.round(Math.random() * (max - min) + min)
 const randomName = () => capitalizeStr(names[Math.floor(Math.random() * names.length)])
 const average = arr => arr.reduce( ( p, c ) => p + c, 0 ) / arr.length;
+const yearGoals = [
+    100,
+    500,
+    1000,
+    5000,
+    10000,
+    50000,
+    100000,
+    500000,
+    1000000,
+    50000000,
+    100000000
+]
 
 class Person {
     constructor(name, age, x, y) {
@@ -22,6 +35,7 @@ class Person {
 // HTML Elements
 let gameSpeedInput   = document.getElementById("game-speed-input")
 let birthChanceInput = document.getElementById("birth-chance-input")
+let deadlyVirusInput = document.getElementById("deadly-virus-input")
 let playPauseButton  = document.getElementById("play-pause-btn")
 
 let yearsPassedInput       = document.getElementById('years-passed-input')
@@ -43,6 +57,7 @@ let worldWarBtn  = document.getElementById('world-war-btn')
 // User has control
 let speed   = 500 // cannot go below 500
 let birthChance = 30 / 100 // percentage of children being born
+let deadyVirus = true
 
 // User doesnt have control
 let people  = []
@@ -52,6 +67,8 @@ let years   = 0
 let update  = ""
 let running = false
 let notifications = 0
+let warHappening = false
+let warYears = 0
 
 // Start off with 5 people
 for (let i = 0; i < 5; i++) {
@@ -70,41 +87,78 @@ async function updateYears() {
             }
         }
 
-        if (years % 150 == 0) {
-            let amountToKill = Math.floor(people.length / 1.5) - 1
+        if (warHappening) {
+            warYears += 1
+
+            let amountToKill = randomInt(350, 500)
             let dead = people.slice(0, amountToKill)
             // deaths.push(...dead)
             deaths += dead.length
             people = dead
 
-            notification(`☠️ A deadly virus just killed ${amountToKill}!`)
+            notification(`☠️ ${amountToKill.toLocaleString()} people were just killed during the war!`)
+            toastNotification(`☠️ ${amountToKill.toLocaleString()} people were just killed during the war!`)
+
+            if (warYears >= randomInt(3, 4)) worldWar()
+        }
+
+        if (yearGoals.includes(years)) {
+            toastNotification(`🎉 You've just reached ${years.toLocaleString()} years!`)
+        }
+
+        if (deadyVirus) {
+            if (years % 150 == 0) {
+                let amountToKill = Math.floor(people.length / 1.9) - 1
+                let dead = people.slice(0, amountToKill)
+                // deaths.push(...dead)
+                deaths += dead.length
+                people = dead
+
+                notification(`☠️ A deadly virus just killed ${amountToKill.toLocaleString()}!`)
+                toastNotification(`☠️ A deadly virus just killed ${amountToKill.toLocaleString()}!`)
+            } else if (years % 500 == 0) {
+                let amountToKill = Math.floor(people.length / 1.5) - 1
+                let dead = people.slice(0, amountToKill)
+                // deaths.push(...dead)
+                deaths += dead.length
+                people = dead
+
+                notification(`☠️ A deadly virus just killed ${amountToKill.toLocaleString()}!`)
+                toastNotification(`☠️ A deadly virus just killed ${amountToKill.toLocaleString()}!`)
+            } else if (years % 1000 == 0) {
+                let amountToKill = Math.floor(people.length / 1.25) - 1
+                let dead = people.slice(0, amountToKill)
+                // deaths.push(...dead)
+                deaths += dead.length
+                people = dead
+
+                notification(`☠️ A deadly virus just killed ${amountToKill.toLocaleString()}!`)
+                toastNotification(`☠️ A deadly virus just killed ${amountToKill.toLocaleString()}!`)
+            }
         }
     }
 
     setTimeout(updateYears, speed)
 }
 
-const notification = text => {
-    // if (notifications <= 5) {
-    //     Toastify({
-    //         text: text,
-    //         duration: 3000,
-    //         newWindow: true,
-    //         close: false,
-    //         gravity: "top", // `top` or `bottom`
-    //         position: "right", // `left`, `center` or `right`
-    //         stopOnFocus: true, // Prevents dismissing of toast on hover
-    //         style: {
-    //           background: "#2d2d2d",
-    //           boxShadow: "none"
-    //         }
-    //     }).showToast();
-    //     notifications += 1
-    // } else {
-    //     notifications = 0
-    //     return
-    // }
+const toastNotification = text => {
+    Toastify({
+        text: text,
+        duration: 3000,
+        newWindow: true,
+        close: false,
+        gravity: "top", // `top` or `bottom`
+        position: "right", // `left`, `center` or `right`
+        stopOnFocus: true, // Prevents dismissing of toast on hover
+        style: {
+          background: "#2d2d2d",
+          boxShadow: "none"
+        }
+    }).showToast();
+}
 
+const notification = text => {
+    notifications += 1
     let listItem = document.createElement("li")
     listItem.classList = "list-group-item"
     listItem.innerText = text
@@ -119,16 +173,20 @@ const covid19 = () => {
     deaths += dead.length
     people = dead
 
-    notification(`🤢 Covid 19 just hit, Kkilling ${amountToKill} people!`)
+    notification(`🤢 Covid 19 just hit, Killing ${amountToKill} people!`)
 }
 
 const worldWar = () => {
+    warYears = 0
+
     if (worldWarBtn.innerText.toLocaleLowerCase().includes("stop")) {
         worldWarBtn.innerText = "Start a war"
         worldWarBtn.classList = "btn btn-outline-danger w-100 py-3"
+        warHappening = false
     } else {
         worldWarBtn.innerText = "Stop war"
         worldWarBtn.classList = "btn btn-danger w-100 py-3"
+        warHappening = true
     }
 }
 
@@ -169,6 +227,12 @@ async function simulation() {
                 theEndCard.classList.remove("hide")
                 theEndCard.classList.add("show")
                 stopSimulation();
+            }
+        }
+
+        if (notifications >= 15) {
+            while (updatesList.childNodes.length > 10) {
+                updatesList.removeChild(updatesList.lastChild);
             }
         }
 
@@ -224,12 +288,14 @@ const startSimulation = () => {
 
     speed = parseInt(gameSpeedInput.value) * 1000
     birthChance = parseInt(birthChanceInput.value) / 100
+    deadyVirus = deadlyVirusInput.checked
     running = true
 
     gameSpeedInput.disabled = true
     birthChanceInput.disabled = true
+    deadlyVirusInput.disabled = true
 
-    // worldWarBtn.disabled = false
+    worldWarBtn.disabled = false
     covid19Btn.disabled = false
     startOverBtn.disabled = false
 
@@ -246,8 +312,9 @@ const stopSimulation = () => {
 
     gameSpeedInput.disabled = false
     birthChanceInput.disabled = false
+    deadlyVirusInput.disabled = false
 
-    // worldWarBtn.disabled = true
+    worldWarBtn.disabled = true
     covid19Btn.disabled = true
     startOverBtn.disabled = true
 
