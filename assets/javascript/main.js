@@ -44,7 +44,7 @@ let update  = ""
 let running = false
 
 // Start off with 5 people
-for (let i = 0; i < 50; i++) {
+for (let i = 0; i < 5; i++) {
     people.push(new Person(randomName(), 0, 0, 0))
 }
 
