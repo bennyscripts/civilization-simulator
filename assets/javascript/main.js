@@ -347,3 +347,16 @@ const resetSimulation = () => {
 
     notification("😭 Simulation has been reset!")
 }
+
+document.body.onkeyup = function(e) {
+    if (e.key == " " ||
+        e.code == "Space" ||      
+        e.keyCode == 32      
+    ) {
+        if (running) {
+            stopSimulation()
+        } else {
+            startSimulation()
+        }
+    }
+}
