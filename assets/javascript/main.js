@@ -270,7 +270,7 @@ const resetSimulation = () => {
     }
 
     people  = []
-    deaths  = []
+    deaths  = 0
     years   = 0
     update  = ""
 
