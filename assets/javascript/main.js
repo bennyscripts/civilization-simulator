@@ -138,9 +138,9 @@ async function simulation() {
         // console.log(`Current deaths: ${deaths.length}`)
         // console.log(update)
 
-        yearsPassedInput.value = years
-        currentPopulationInput.value = people.length
-        currentDeathsInput.value = deaths.length
+        yearsPassedInput.value = years.toLocaleString()
+        currentPopulationInput.value = people.length.toLocaleString()
+        currentDeathsInput.value = deaths.length.toLocaleString()
         updatesInput.value = update
     }
 
