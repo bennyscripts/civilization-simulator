@@ -12,9 +12,18 @@
 
         <link rel="stylesheet" href="assets/style.css?v=2">
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+        <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
     </head>
     <body>
-        <div class="container py-5">
+        <!-- <div class="notification">
+            <div class="card">
+                <div class="card-body p-4">
+                    <span id="notification-text">💕 sex is happening and quaking 15 people were born</span>
+                </div>
+            </div>
+        </div> -->
+
+        <div class="container">
             <div class="alert alert-danger text-center hide" role="alert" id="the-end-card">
                 <h2 class="fw-bold">You suck!</h2>
                 <p class="mb-0">Everyone in your civilization died.</p>
@@ -44,17 +53,75 @@
                         </div>
                     </div>  
                 </div>
-                <div class="col-lg-3 col-md-6 col-sm-12 mt-3">
+                <div class="col-lg-6 col-md-6 col-sm-12 mt-3">
                     <div class="card h-100">
+                        <div class="card-header">
+                            <h5 class="text-left py-2 mb-0">Statistics</h5>
+                        </div>
+                        <div class="card-body" style="display: flex; flex-direction: column;">
+                            <div class="row">
+                                <div class="col-12">
+                                    <div class="input-group mb-3">
+                                        <span class="input-group-text" style="background-color: #2d2d2d!important; padding-left: 20px;">Years passed</span>
+                                        <input type="text" class="form-control fw-bold" id="years-passed-input" disabled style="text-align: right; border-left: none; padding: 10px 25px; font-size: 1.5em;">
+                                    </div>  
+                                </div>
+                                <div class="col-6">
+                                    <div class="input-group mb-3">
+                                        <span class="input-group-text" style="background-color: #2d2d2d!important;">Population</span>
+                                        <input type="text" class="form-control" id="current-population-input" disabled style="text-align: right; border-left: none; padding: 10px 25px;">
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="input-group mb-3">
+                                        <span class="input-group-text" style="background-color: #2d2d2d!important;">Children</span>
+                                        <input type="text" class="form-control" id="current-children-input" disabled style="text-align: right; border-left: none; padding: 10px 25px;">
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="input-group mb-3">
+                                        <span class="input-group-text" style="background-color: #2d2d2d!important;">Teenagers</span>
+                                        <input type="text" class="form-control" id="current-teenagers-input" disabled style="text-align: right; border-left: none; padding: 10px 25px;">
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="input-group mb-3">
+                                        <span class="input-group-text" style="background-color: #2d2d2d!important;">Adults</span>
+                                        <input type="text" class="form-control" id="current-adults-input" disabled style="text-align: right; border-left: none; padding: 10px 25px;">
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="input-group mb-3">
+                                        <span class="input-group-text" style="background-color: #2d2d2d!important;">Average age</span>
+                                        <input type="text" class="form-control" id="current-average-age-input" disabled style="text-align: right; border-left: none; padding: 10px 25px;">
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="input-group mb-3">
+                                        <span class="input-group-text" style="background-color: #2d2d2d!important;">Deaths</span>
+                                        <input type="text" class="form-control" id="current-deaths-input" disabled style="text-align: right; border-left: none; padding: 10px 25px;">
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- <div style="flex-grow: 1;">
+                            </div>
+                            <div class="">
+                                <input type="text" class="form-control" id="updates-input" disabled style="padding: 10px 25px;">
+                            </div> -->
+                        </div>
+                    </div>                    
+                </div>
+                <div class="col-lg-3 col-md-6 col-sm-12 mt-3">
+                    <div class="card">
                         <div class="card-header">
                             <h5 class="text-left py-2 mb-0">Utilities</h5>
                         </div>
                         <div class="card-body" style="display: flex; flex-direction: column;">
-                            <!-- <div class="card h-100 mb-3" style="flex-grow: 1;">
-                                <div class="card-body" id="people-map-wrapper">
-                                    <canvas id="people-map"></canvas>
-                                </div>
-                            </div>   -->
+                            <div class="card mb-3" style="border: 0px solid transparent; height: 250px; overflow-y: scroll;">
+                                <ul class="list-group" id="updates-list">
+                                    
+                                </ul>
+                            </div>  
                             <div class="row">
                                 <div class="col-6" style="padding-right: 5px;">
                                     <button class="btn btn-danger w-100 py-3" id="covid-19-btn" type="submit" disabled onclick="covid19()">Covid-19</button>
@@ -69,32 +136,6 @@
                         </div>
                     </div>                    
                 </div>
-                <div class="col-lg-6 col-md-6 col-sm-12 mt-3">
-                    <div class="card h-100">
-                        <div class="card-header">
-                            <h5 class="text-left py-2 mb-0">Statistics</h5>
-                        </div>
-                        <div class="card-body" style="display: flex; flex-direction: column;">
-                            <div class="input-group mb-3">
-                                <span class="input-group-text">Years passed</span>
-                                <input type="text" class="form-control" id="years-passed-input" disabled>
-                            </div>
-                            <div class="input-group mb-3">
-                                <span class="input-group-text">Current population</span>
-                                <input type="text" class="form-control" id="current-population-input" disabled>
-                            </div>
-                            <div class="input-group mb-3">
-                                <span class="input-group-text">Current deaths</span>
-                                <input type="text" class="form-control" id="current-deaths-input" disabled>
-                            </div>
-                            <div style="flex-grow: 1;">
-                            </div>
-                            <div class="">
-                                <input type="text" class="form-control" id="updates-input" disabled>
-                            </div>
-                        </div>
-                    </div>                    
-                </div>
                 <!-- <div class="col-12 mt-3">
                     <div class="card h-100">
                         <div class="card-body" id="people-map-wrapper">
@@ -105,6 +146,7 @@
             </div>
         </div>
     
+        <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
         <script src="assets/javascript/names.js"></script>
         <script src="assets/javascript/main.js?v=4"></script>
 

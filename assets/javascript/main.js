@@ -1,6 +1,7 @@
 const capitalizeStr = (string) => string.charAt(0).toUpperCase() + string.slice(1)
 const randomInt = (min, max) => Math.round(Math.random() * (max - min) + min)
 const randomName = () => capitalizeStr(names[Math.floor(Math.random() * names.length)])
+const average = arr => arr.reduce( ( p, c ) => p + c, 0 ) / arr.length;
 
 class Person {
     constructor(name, age, x, y) {
@@ -19,14 +20,21 @@ class Person {
 }
 
 // HTML Elements
-let gameSpeedInput         = document.getElementById("game-speed-input")
-let birthChanceInput       = document.getElementById("birth-chance-input")
-let playPauseButton        = document.getElementById("play-pause-btn")
+let gameSpeedInput   = document.getElementById("game-speed-input")
+let birthChanceInput = document.getElementById("birth-chance-input")
+let playPauseButton  = document.getElementById("play-pause-btn")
+
 let yearsPassedInput       = document.getElementById('years-passed-input')
 let currentPopulationInput = document.getElementById('current-population-input')
 let currentDeathsInput     = document.getElementById('current-deaths-input')
-let updatesInput           = document.getElementById('updates-input')
-let theEndCard             = document.getElementById('the-end-card')
+let currentChildrenInput   = document.getElementById('current-children-input')
+let currentTeenagersInput  = document.getElementById('current-teenagers-input')
+let currentAdultsInput     = document.getElementById('current-adults-input')
+let currentAverageAgeInput = document.getElementById('current-average-age-input')
+
+let updatesInput = document.getElementById('updates-input')
+let updatesList  = document.getElementById('updates-list')
+let theEndCard   = document.getElementById('the-end-card')
 
 let covid19Btn   = document.getElementById("covid-19-btn")
 let startOverBtn = document.getElementById("start-over-btn")
@@ -43,6 +51,7 @@ let deaths  = 0
 let years   = 0
 let update  = ""
 let running = false
+let notifications = 0
 
 // Start off with 5 people
 for (let i = 0; i < 5; i++) {
@@ -68,19 +77,39 @@ async function updateYears() {
             deaths += dead.length
             people = dead
 
-            update = `A deadly virus just killed ${amountToKill}!`
+            notification(`☠️ A deadly virus just killed ${amountToKill}!`)
         }
     }
 
     setTimeout(updateYears, speed)
 }
 
-async function clearUpdate() {
-    if (running) {
-        update = ""
-    }
+const notification = text => {
+    // if (notifications <= 5) {
+    //     Toastify({
+    //         text: text,
+    //         duration: 3000,
+    //         newWindow: true,
+    //         close: false,
+    //         gravity: "top", // `top` or `bottom`
+    //         position: "right", // `left`, `center` or `right`
+    //         stopOnFocus: true, // Prevents dismissing of toast on hover
+    //         style: {
+    //           background: "#2d2d2d",
+    //           boxShadow: "none"
+    //         }
+    //     }).showToast();
+    //     notifications += 1
+    // } else {
+    //     notifications = 0
+    //     return
+    // }
 
-    setTimeout(clearUpdate, 2000)
+    let listItem = document.createElement("li")
+    listItem.classList = "list-group-item"
+    listItem.innerText = text
+
+    updatesList.insertBefore(listItem, updatesList.firstChild)
 }
 
 const covid19 = () => {
@@ -90,7 +119,7 @@ const covid19 = () => {
     deaths += dead.length
     people = dead
 
-    update = `Covid 19 just hit! Killing ${amountToKill} people!`
+    notification(`🤢 Covid 19 just hit, Kkilling ${amountToKill} people!`)
 }
 
 const worldWar = () => {
@@ -101,6 +130,32 @@ const worldWar = () => {
         worldWarBtn.innerText = "Stop war"
         worldWarBtn.classList = "btn btn-danger w-100 py-3"
     }
+}
+
+const getAgeType = () => {
+    let teens    = []
+    let children = []
+    let adults   = []
+
+    for (index in people) {
+        guy = people[index]
+        if (guy.age >= 13 && guy.age <= 18) {
+            teens.push(guy)
+        } else if (guy.age < 13) {
+            children.push(guy)
+        } else {
+            adults.push(guy)
+        }
+    }
+
+    return [children, teens, adults]
+}
+
+const getAverageAge = () => {
+    let agesList = []
+    for (index in people) agesList.push(people[index].age)
+
+    return Math.floor(average(agesList))
 }
 
 async function simulation() {
@@ -117,6 +172,9 @@ async function simulation() {
             }
         }
 
+        let newPeople = 0;
+        let passedAway = 0;
+
         for (index in people) {
             guy = people[index]
             
@@ -125,16 +183,19 @@ async function simulation() {
                     people = people.filter(x => x.name != guy.name)
                     // deaths.push(guy)
                     deaths += 1
-                    // update = `${guy.name} has sadly passed away at ${guy.age}`
+                    passedAway += 1;
                 } else if (guy.age > randomInt(20, 28) && guy.age < randomInt(40, 50)) {
                     if (Math.random() < birthChance) {
                         newGuy = new Person(randomName(), 0, 0, 0)
                         people.push(newGuy)
-                        // update = `${newGuy.name} has been born!`
+                        newPeople += 1
                     }
                 }
             }
         }
+
+        if (passedAway > 0) notification(`☠️ ${passedAway} people passed away today`)
+        if (newPeople > 0) notification(`💞 ${newPeople} people have just been born!`)
 
         // console.clear()
         // console.log(`Years passed: ${years}`)
@@ -142,11 +203,16 @@ async function simulation() {
         // console.log(`Current deaths: ${deaths.length}`)
         // console.log(update)
 
-        yearsPassedInput.value = years.toLocaleString()
+        yearsPassedInput.value       = years.toLocaleString()
         currentPopulationInput.value = people.length.toLocaleString()
-        // currentDeathsInput.value = deaths.length.toLocaleString()
-        currentDeathsInput.value = deaths.toLocaleString()
-        updatesInput.value = update
+        // currentDeathsInput.value  = deaths.length.toLocaleString()
+        currentDeathsInput.value     = deaths.toLocaleString()
+
+        let diffAgeStuff             = getAgeType()
+        currentChildrenInput.value   = diffAgeStuff[0].length.toLocaleString()
+        currentTeenagersInput.value  = diffAgeStuff[1].length.toLocaleString()
+        currentAdultsInput.value     = diffAgeStuff[2].length.toLocaleString()
+        currentAverageAgeInput.value = getAverageAge().toLocaleString()
     }
 
     setTimeout(simulation, speed/4)
@@ -172,7 +238,6 @@ const startSimulation = () => {
     playPauseButton.setAttribute('onclick', 'stopSimulation()')
 
     updateYears()
-    clearUpdate()
     simulation()
 }
 
@@ -212,4 +277,6 @@ const resetSimulation = () => {
     for (let i = 0; i < 5; i++) {
         people.push(new Person(randomName(), 0, 0, 0))
     }
+
+    notification("😭 Simulation has been reset!")
 }
