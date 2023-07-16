@@ -11,11 +11,18 @@
     grid-template-columns: repeat(100, auto);
     /* background-color: #2196F3; */
     padding: 10px;
-  }
-  .grid-item {
+}
+
+.grid-item {
     /* background-color: rgba(255, 255, 255, 0.8);
     border: 1px solid rgba(0, 0, 0, 0.8);
     padding: 20px;
     font-size: 30px; */
     text-align: center;
-  }
+}
+
+@media screen and (max-width: 768px) {
+    .container {
+        padding-top: 0px!important;
+    }
+}
