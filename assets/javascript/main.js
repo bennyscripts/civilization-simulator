@@ -102,9 +102,9 @@ const worldWar = () => {
 
 async function simulation() {
     if (running) {
-        if (speed < 500) {
-            speed = 500
-        }
+        // if (speed < 100) {
+        //     speed = 500
+        // }
 
         if (people.length <= 0) {
             if (!theEndCard.classList.contains("show")) {
