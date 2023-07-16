@@ -38,7 +38,8 @@ let birthChance = 30 / 100 // percentage of children being born
 
 // User doesnt have control
 let people  = []
-let deaths  = []
+// let deaths  = []
+let deaths  = 0
 let years   = 0
 let update  = ""
 let running = false
@@ -63,7 +64,8 @@ async function updateYears() {
         if (years % 150 == 0) {
             let amountToKill = Math.floor(people.length / 1.5) - 1
             let dead = people.slice(0, amountToKill)
-            deaths.push(...dead)
+            // deaths.push(...dead)
+            deaths += dead.length
             people = dead
 
             update = `A deadly virus just killed ${amountToKill}!`
@@ -84,7 +86,8 @@ async function clearUpdate() {
 const covid19 = () => {
     let amountToKill = Math.floor(people.length / 2) - 1
     let dead = people.slice(0, amountToKill)
-    deaths.push(...dead)
+    // deaths.push(...dead)
+    deaths += dead.length
     people = dead
 
     update = `Covid 19 just hit! Killing ${amountToKill} people!`
@@ -120,7 +123,8 @@ async function simulation() {
             if (guy != undefined) {
                 if (guy.age >= randomInt(65, 85)) {
                     people = people.filter(x => x.name != guy.name)
-                    deaths.push(guy)
+                    // deaths.push(guy)
+                    deaths += 1
                     // update = `${guy.name} has sadly passed away at ${guy.age}`
                 } else if (guy.age > randomInt(20, 28) && guy.age < randomInt(40, 50)) {
                     if (Math.random() < birthChance) {
@@ -140,7 +144,8 @@ async function simulation() {
 
         yearsPassedInput.value = years.toLocaleString()
         currentPopulationInput.value = people.length.toLocaleString()
-        currentDeathsInput.value = deaths.length.toLocaleString()
+        // currentDeathsInput.value = deaths.length.toLocaleString()
+        currentDeathsInput.value = deaths.toLocaleString()
         updatesInput.value = update
     }
 
