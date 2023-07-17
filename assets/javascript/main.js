@@ -32,11 +32,25 @@ class Person {
     }
 }
 
+const width = window.innerWidth
+|| document.documentElement.clientWidth
+|| document.body.clientWidth;
+
+const height = window.innerHeight
+|| document.documentElement.clientHeight
+|| document.body.clientHeight;
+
 // HTML Elements
 let gameSpeedInput   = document.getElementById("game-speed-input")
 let birthChanceInput = document.getElementById("birth-chance-input")
 let deadlyVirusInput = document.getElementById("deadly-virus-input")
 let playPauseButton  = document.getElementById("play-pause-btn")
+
+let playPauseButtonMobile = document.getElementById("play-pause-btn-mobile")
+let resetButtonMobile     = document.getElementById("reset-btn-mobile")
+let settingsButtonMobile  = document.getElementById("settings-btn-mobile")
+let theEndCardMobile      = document.getElementById('the-end-card-mobile')
+let fullscrenOpacity      = document.getElementsByClassName('fullsize-opacity')[0]
 
 let yearsPassedInput       = document.getElementById('years-passed-input')
 let currentPopulationInput = document.getElementById('current-population-input')
@@ -50,9 +64,19 @@ let updatesInput = document.getElementById('updates-input')
 let updatesList  = document.getElementById('updates-list')
 let theEndCard   = document.getElementById('the-end-card')
 
-let covid19Btn   = document.getElementById("covid-19-btn")
+let covid19Btn   = document.getElementsByClassName("covid-19-btn")
 let startOverBtn = document.getElementById("start-over-btn")
 let worldWarBtn  = document.getElementById('world-war-btn')
+
+let settingsCard = document.getElementsByClassName('settings-card')[0]
+let statsCard    = document.getElementsByClassName('stats-card')[0]
+let utilsCard    = document.getElementsByClassName('utils-card')[0]
+let utilities    = document.getElementsByClassName('utilities')[0]
+
+let settingsCardBody   = settingsCard.getElementsByClassName("card-body")[0]
+let settingsCardFooter = settingsCard.getElementsByClassName("card-footer")[0]
+let utilsCardHeader    = utilsCard.getElementsByClassName("card-header")[0]
+let statsCardHeader    = statsCard.getElementsByClassName("card-header")[0]
 
 // User has control
 let speed   = 500 // cannot go below 500
@@ -216,6 +240,38 @@ const getAverageAge = () => {
     return Math.floor(average(agesList))
 }
 
+const endCard = (show) => {
+    if (show) {
+        if (width >= 768) {
+            if (!theEndCard.classList.contains("show")) {
+                theEndCard.classList.remove("hide")
+                theEndCard.classList.add("show")
+            }
+        } else {
+            if (!theEndCardMobile.classList.contains("show")) {
+                theEndCardMobile.classList.remove("hide")
+                theEndCardMobile.classList.add("show")
+                fullscrenOpacity.classList.remove("hide")
+                fullscrenOpacity.classList.add("show")
+            }
+        }
+    } else {
+        if (width >= 768) {
+            if (!theEndCard.classList.contains("hide")) {
+                theEndCard.classList.remove("show")
+                theEndCard.classList.add("hode")
+            }
+        } else {
+            if (!theEndCardMobile.classList.contains("hide")) {
+                theEndCardMobile.classList.remove("show")
+                theEndCardMobile.classList.add("hide")
+                fullscrenOpacity.classList.remove("show")
+                fullscrenOpacity.classList.add("hide")
+            }
+        }        
+    }
+}
+
 async function simulation() {
     if (running) {
         // if (speed < 100) {
@@ -223,11 +279,10 @@ async function simulation() {
         // }
 
         if (people.length <= 0) {
-            if (!theEndCard.classList.contains("show")) {
-                theEndCard.classList.remove("hide")
-                theEndCard.classList.add("show")
-                stopSimulation();
-            }
+            endCard(true)
+            resetSimulation()
+            stopSimulation()
+            setTimeout(() => {endCard(false)}, 3000)
         }
 
         if (notifications >= 15) {
@@ -268,18 +323,68 @@ async function simulation() {
         // console.log(update)
 
         yearsPassedInput.value       = years.toLocaleString()
-        currentPopulationInput.value = people.length.toLocaleString()
-        // currentDeathsInput.value  = deaths.length.toLocaleString()
-        currentDeathsInput.value     = deaths.toLocaleString()
+        currentPopulationInput.innerText = people.length.toLocaleString()
+        // currentDeathsInput.innerText  = deaths.length.toLocaleString()
+        currentDeathsInput.innerText     = deaths.toLocaleString()
 
         let diffAgeStuff             = getAgeType()
-        currentChildrenInput.value   = diffAgeStuff[0].length.toLocaleString()
-        currentTeenagersInput.value  = diffAgeStuff[1].length.toLocaleString()
-        currentAdultsInput.value     = diffAgeStuff[2].length.toLocaleString()
-        currentAverageAgeInput.value = getAverageAge().toLocaleString()
+        currentChildrenInput.innerText   = diffAgeStuff[0].length.toLocaleString()
+        currentTeenagersInput.innerText  = diffAgeStuff[1].length.toLocaleString()
+        currentAdultsInput.innerText     = diffAgeStuff[2].length.toLocaleString()
+        currentAverageAgeInput.innerText = getAverageAge().toLocaleString()
     }
 
     setTimeout(simulation, speed/4)
+}
+
+const mobileUi = (running) => {
+    if (width <= 768) {
+        settingsCardBody.classList.remove("hide")
+        settingsCardFooter.classList.remove("hide")
+        utilsCardHeader.classList.remove("hide")
+        statsCardHeader.classList.remove("hide")
+        utilities.classList.remove("hide")
+        statsCard.classList.remove("hide")
+        utilsCard.classList.remove("hide")
+        settingsCardBody.classList.remove("show")
+        settingsCardFooter.classList.remove("show")
+        utilsCardHeader.classList.remove("show")
+        statsCardHeader.classList.remove("show")
+        utilities.classList.remove("show")
+        statsCard.classList.remove("show")
+        utilsCard.classList.remove("show")
+    
+        if (!running) {
+            if (settingsCardBody.classList.contains("hide") || !settingsCardBody.classList.contains("show")) settingsCardBody.classList.add("show")
+            if (settingsCardFooter.classList.contains("hide") || !settingsCardFooter.classList.contains("show")) settingsCardFooter.classList.add("show")
+            if (utilsCardHeader.classList.contains("hide") || !utilsCardHeader.classList.contains("show")) utilsCardHeader.classList.add("show")
+            if (statsCardHeader.classList.contains("hide") || !statsCardHeader.classList.contains("show")) statsCardHeader.classList.add("show")
+            if (utilities.classList.contains("hide") || !utilities.classList.contains("show")) utilities.classList.add("show")
+        
+            if (statsCard.classList.contains("show") || !statsCard.classList.contains("hide")) statsCard.classList.add("hide")
+            if (utilsCard.classList.contains("show") || !utilsCard.classList.contains("hide")) utilsCard.classList.add("hide")
+        } else {
+            if (settingsCardBody.classList.contains("show") || !settingsCardBody.classList.contains("hide")) settingsCardBody.classList.add("hide")
+            if (settingsCardFooter.classList.contains("show") || !settingsCardFooter.classList.contains("hide")) settingsCardFooter.classList.add("hide")
+            if (utilsCardHeader.classList.contains("show") || !utilsCardHeader.classList.contains("hide")) utilsCardHeader.classList.add("hide")
+            if (statsCardHeader.classList.contains("show") || !statsCardHeader.classList.contains("hide")) statsCardHeader.classList.add("hide")
+            if (utilities.classList.contains("show") || !utilities.classList.contains("hide")) utilities.classList.add("hide")
+        
+            if (statsCard.classList.contains("hide") || !statsCard.classList.contains("show")) statsCard.classList.add("show")
+            if (utilsCard.classList.contains("hide") || !utilsCard.classList.contains("show")) utilsCard.classList.add("show")
+        }
+    }
+}
+
+const pauseSimulation = () => {
+    running = false
+    playPauseButtonMobile.classList = "fa-solid fa-play fa-xl"
+    playPauseButtonMobile.setAttribute("onclick", "startSimulation()")
+
+    worldWarBtn.disabled = true
+    covid19Btn[0].disabled = true
+    covid19Btn[1].disabled = true
+    startOverBtn.disabled = true
 }
 
 const startSimulation = () => {
@@ -296,13 +401,18 @@ const startSimulation = () => {
     deadlyVirusInput.disabled = true
 
     worldWarBtn.disabled = false
-    covid19Btn.disabled = false
+    covid19Btn[0].disabled = false
+    covid19Btn[1].disabled = false
     startOverBtn.disabled = false
 
     playPauseButton.innerText = "Stop Civilization"
     playPauseButton.classList = "btn btn-danger w-100"
+    playPauseButtonMobile.classList = "fa-solid fa-pause fa-xl"
     playPauseButton.setAttribute('onclick', 'stopSimulation()')
+    playPauseButtonMobile.setAttribute("onclick", "pauseSimulation()")
+    settingsButtonMobile.setAttribute("onclick", "stopSimulation()")
 
+    mobileUi(running)
     updateYears()
     simulation()
 }
@@ -315,8 +425,11 @@ const stopSimulation = () => {
     deadlyVirusInput.disabled = false
 
     worldWarBtn.disabled = true
-    covid19Btn.disabled = true
+    covid19Btn[0].disabled = true
+    covid19Btn[1].disabled = true
     startOverBtn.disabled = true
+
+    mobileUi(running)
 
     if (theEndCard.classList.contains("show")) {
         playPauseButton.innerText = "Restart Civilization"
@@ -325,7 +438,10 @@ const stopSimulation = () => {
     } else {
         playPauseButton.innerText = "Start Civilization"
         playPauseButton.classList = "btn btn-success w-100"
+        playPauseButtonMobile.classList = "fa-solid fa-play fa-xl"
         playPauseButton.setAttribute('onclick', 'startSimulation()')
+        playPauseButtonMobile.setAttribute("onclick", "startSimulation()")
+        settingsButtonMobile.setAttribute("onclick", "startSimulation()")
     }
 }
 
@@ -360,3 +476,6 @@ document.body.onkeyup = function(e) {
         }
     }
 }
+
+mobileUi(running)
+playPauseButtonMobile.setAttribute("onclick", "startSimulation()")

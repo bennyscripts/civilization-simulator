@@ -12,27 +12,33 @@
         <meta name="twitter:image" content="https://user-images.githubusercontent.com/83777519/253831972-cef99db7-656f-4a31-8183-45f50a241c30.gif">
         <meta name="theme-color" content="#ed9c62">
 
-        <link rel="stylesheet" href="assets/style.css?v=4">
+        <script src="https://kit.fontawesome.com/bbd7036ee1.js" crossorigin="anonymous"></script>
+        <link rel="stylesheet" href="assets/style.css?v=5">
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
         <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
     </head>
     <body>
-        <!-- <div class="notification">
-            <div class="card">
-                <div class="card-body p-4">
-                    <span id="notification-text">💕 sex is happening and quaking 15 people were born</span>
-                </div>
-            </div>
-        </div> -->
+        <div class="mobile-bottom-bar">
+            <i class="fa-solid fa-rotate-right fa-xl" id="reset-btn-mobile" onclick="location.reload();"></i>
+            <i class="fa-solid fa-play fa-xl" id="play-pause-btn-mobile"></i>
+            <i class="fa-solid fa-sliders fa-xl" id="settings-btn-mobile" onclick="stopSimulation()"></i>
+        </div>
+
+        <div class="fullsize-opacity hide"></div>
+
+        <div class="alert alert-danger text-center hide" role="alert" id="the-end-card-mobile">
+            <h2 class="fw-bold">You suck!</h2>
+            <p class="mb-0">Everyone in your civilization died.</p>
+        </div>
 
         <div class="container">
             <div class="alert alert-danger text-center hide" role="alert" id="the-end-card">
                 <h2 class="fw-bold">You suck!</h2>
                 <p class="mb-0">Everyone in your civilization died.</p>
             </div>
-            <div class="row">
-                <div class="col-lg-3 col-md-6 col-sm-12 mt-3">
-                    <div class="card h-100">
+            <div class="custom-row">
+                <div class="custom-col">
+                    <div class="card h-100 settings-card">
                         <div class="card-header" style="padding: 30px 0px; background: linear-gradient(137deg, rgba(255,200,54,1) 0%, #ed6262 100%);">
                             <h1 class="text-center m-0 fw-bold" style="color: white;">Civilization Simulator</h1>
                         </div>
@@ -59,8 +65,8 @@
                         </div>
                     </div>  
                 </div>
-                <div class="col-lg-6 col-md-6 col-sm-12 mt-3">
-                    <div class="card h-100">
+                <div class="custom-col">
+                    <div class="card h-100 stats-card">
                         <div class="card-header">
                             <h5 class="text-left py-2 mb-0">Statistics</h5>
                         </div>
@@ -68,57 +74,49 @@
                             <div class="row">
                                 <div class="col-12">
                                     <div class="input-group mb-3">
-                                        <span class="input-group-text" style="background-color: #2d2d2d!important; padding-left: 20px; padding-right: 20px;">Years passed</span>
+                                        <span class="input-group-text" style="background-color: #2d2d2d!important; padding-left: 20px; padding-right: 20px; font-size: 1.15em;">Years passed</span>
                                         <input type="text" class="form-control fw-bold" id="years-passed-input" disabled style="text-align: right; border-left: none; padding: 10px 25px; font-size: 1.5em;">
                                     </div>  
                                 </div>
                                 <div class="col-6">
-                                    <div class="input-group mb-3">
-                                        <span class="input-group-text" style="background-color: #2d2d2d!important;">Population</span>
-                                        <input type="text" class="form-control" id="current-population-input" disabled style="text-align: right; border-left: none; padding: 10px 25px;">
+                                    <div class="card mb-3" style="border: none!important;">
+                                        <div class="card-body stat-card">Population <span id="current-population-input"></span></div>
                                     </div>
                                 </div>
                                 <div class="col-6">
-                                    <div class="input-group mb-3">
-                                        <span class="input-group-text" style="background-color: #2d2d2d!important;">Children</span>
-                                        <input type="text" class="form-control" id="current-children-input" disabled style="text-align: right; border-left: none; padding: 10px 25px;">
+                                    <div class="card mb-3" style="border: none!important;">
+                                        <div class="card-body stat-card">Children <span id="current-children-input"></span></div>
                                     </div>
                                 </div>
                                 <div class="col-6">
-                                    <div class="input-group mb-3">
-                                        <span class="input-group-text" style="background-color: #2d2d2d!important;">Teenagers</span>
-                                        <input type="text" class="form-control" id="current-teenagers-input" disabled style="text-align: right; border-left: none; padding: 10px 25px;">
+                                    <div class="card mb-3" style="border: none!important;">
+                                        <div class="card-body stat-card">Teenagers <span id="current-teenagers-input"></span></div>
                                     </div>
                                 </div>
                                 <div class="col-6">
-                                    <div class="input-group mb-3">
-                                        <span class="input-group-text" style="background-color: #2d2d2d!important;">Adults</span>
-                                        <input type="text" class="form-control" id="current-adults-input" disabled style="text-align: right; border-left: none; padding: 10px 25px;">
+                                    <div class="card mb-3" style="border: none!important;">
+                                        <div class="card-body stat-card">Adults <span id="current-adults-input"></span></div>
                                     </div>
                                 </div>
                                 <div class="col-6">
-                                    <div class="input-group mb-3">
-                                        <span class="input-group-text" style="background-color: #2d2d2d!important;">Average age</span>
-                                        <input type="text" class="form-control" id="current-average-age-input" disabled style="text-align: right; border-left: none; padding: 10px 25px;">
+                                    <div class="card mb-3" style="border: none!important;">
+                                        <div class="card-body stat-card">Average age <span id="current-average-age-input"></span></div>
                                     </div>
                                 </div>
                                 <div class="col-6">
-                                    <div class="input-group mb-3">
-                                        <span class="input-group-text" style="background-color: #2d2d2d!important;">Deaths</span>
-                                        <input type="text" class="form-control" id="current-deaths-input" disabled style="text-align: right; border-left: none; padding: 10px 25px;">
+                                    <div class="card mb-3" style="border: none!important;">
+                                        <div class="card-body stat-card">Deaths <span id="current-deaths-input"></span></div>
                                     </div>
+                                </div>
+                                <div class="col-12">
+                                    <button class="btn btn-danger w-100 py-3 covid-19-btn" type="submit" disabled onclick="covid19()">Covid-19</button>
                                 </div>
                             </div>
-                            <!-- <div style="flex-grow: 1;">
-                            </div>
-                            <div class="">
-                                <input type="text" class="form-control" id="updates-input" disabled style="padding: 10px 25px;">
-                            </div> -->
                         </div>
                     </div>                    
                 </div>
-                <div class="col-lg-3 col-md-6 col-sm-12 mt-3">
-                    <div class="card">
+                <div class="custom-col">
+                    <div class="card utils-card">
                         <div class="card-header">
                             <h5 class="text-left py-2 mb-0">Utilities</h5>
                         </div>
@@ -128,9 +126,9 @@
                                     
                                 </ul>
                             </div>  
-                            <div class="row">
+                            <div class="row utilities">
                                 <div class="col-6" style="padding-right: 5px;">
-                                    <button class="btn btn-danger w-100 py-3" id="covid-19-btn" type="submit" disabled onclick="covid19()">Covid-19</button>
+                                    <button class="btn btn-danger w-100 py-3 covid-19-btn" type="submit" disabled onclick="covid19()">Covid-19</button>
                                 </div>
                                 <div class="col-6" style="padding-left: 5px;">
                                     <button class="btn btn-danger w-100 py-3" id="start-over-btn" type="submit" disabled onclick="resetSimulation()">Start over</button>
@@ -142,57 +140,12 @@
                         </div>
                     </div>                    
                 </div>
-                <!-- <div class="col-12 mt-3">
-                    <div class="card h-100">
-                        <div class="card-body" id="people-map-wrapper">
-                            <canvas id="people-map"></canvas>
-                        </div>
-                    </div>  
-                </div> -->
             </div>
         </div>
     
         <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
         <script src="assets/javascript/names.js"></script>
-        <script src="assets/javascript/main.js?v=8"></script>
-
-        <!-- <script>
-            // horrendous attempt at making a map
-            (function() {
-                const canvasWrapper = document.getElementById('people-map-wrapper')
-                const canvas = document.getElementById('people-map')
-                const ctx = canvas.getContext('2d')
-
-                window.addEventListener('resize', resizeCanvas, false)
-                        
-                function resizeCanvas() {
-                    canvas.width = canvasWrapper.offsetWidth-(16*2)
-                    canvas.height = canvasWrapper.offsetHeight
-
-                    drawStuff() 
-                }
-                
-                resizeCanvas()
-                        
-                function drawStuff() {
-                    let left = 0
-                    let top = 10
-
-                    ctx.font = "12px Arial";
-
-                    for (index in people) {
-                        if ((index + 1) % 19 == 0) {
-                            top *= 2
-                            left = 0
-                        } else {
-                        }
-
-                        ctx.fillText("•", left + index * 10, top);
-                    }
-                }
-            })()
-        </script> -->
-
+        <script src="assets/javascript/main.js?v=9"></script>
         <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js" integrity="sha384-fbbOQedDUMZZ5KreZpsbe1LCZPVmfTnH7ois6mU1QK+m14rQ1l2bGBq41eYeM/fS" crossorigin="anonymous"></script>
     </body>
