@@ -149,6 +149,10 @@ body {
     .mobile-bottom-bar {
         display: none;
     }
+
+    #mobile-covid-19-btn {
+        display: none!important;
+    }
 }
 
 @media screen and (max-width: 768px) {
