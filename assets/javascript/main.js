@@ -93,6 +93,8 @@ let running = false
 let notifications = 0
 let warHappening = false
 let warYears = 0
+let bornLastXYears = 0
+let diedLastXYears = 0
 
 // Start off with 5 people
 for (let i = 0; i < 5; i++) {
@@ -102,6 +104,14 @@ for (let i = 0; i < 5; i++) {
 async function updateYears() {
     if (running && people.length > 0) {
         years += 1
+
+        if (years % 50 == 0) {
+            // if (diedLastXYears > 0) notification(`☠️ Year ${years}: ${diedLastXYears} people dead`)
+            // if (bornLastXYears > 0) notification(`💞 Year ${years}: ${bornLastXYears} people born`)
+
+            bornLastXYears = 0
+            diedLastXYears = 0
+        }
 
         for (index in people) {
             guy = people[index]
@@ -127,30 +137,13 @@ async function updateYears() {
         }
 
         if (yearGoals.includes(years)) {
+            notification(`🎉 You've just reached ${years.toLocaleString()} years!`)
             toastNotification(`🎉 You've just reached ${years.toLocaleString()} years!`)
         }
 
         if (deadyVirus) {
-            if (years % 150 == 0) {
-                let amountToKill = Math.floor(people.length / 1.9) - 1
-                let dead = people.slice(0, amountToKill)
-                // deaths.push(...dead)
-                deaths += dead.length
-                people = dead
-
-                notification(`☠️ A deadly virus just killed ${amountToKill.toLocaleString()}!`)
-                toastNotification(`☠️ A deadly virus just killed ${amountToKill.toLocaleString()}!`)
-            } else if (years % 500 == 0) {
-                let amountToKill = Math.floor(people.length / 1.5) - 1
-                let dead = people.slice(0, amountToKill)
-                // deaths.push(...dead)
-                deaths += dead.length
-                people = dead
-
-                notification(`☠️ A deadly virus just killed ${amountToKill.toLocaleString()}!`)
-                toastNotification(`☠️ A deadly virus just killed ${amountToKill.toLocaleString()}!`)
-            } else if (years % 1000 == 0) {
-                let amountToKill = Math.floor(people.length / 1.25) - 1
+            if (years % 1000 == 0) {
+                let amountToKill = Math.floor(people.length / 1.95) - 1
                 let dead = people.slice(0, amountToKill)
                 // deaths.push(...dead)
                 deaths += dead.length
@@ -166,19 +159,21 @@ async function updateYears() {
 }
 
 const toastNotification = text => {
-    Toastify({
-        text: text,
-        duration: 3000,
-        newWindow: true,
-        close: false,
-        gravity: "top", // `top` or `bottom`
-        position: "right", // `left`, `center` or `right`
-        stopOnFocus: true, // Prevents dismissing of toast on hover
-        style: {
-          background: "#2d2d2d",
-          boxShadow: "none"
-        }
-    }).showToast();
+    if (width > 768) {
+        Toastify({
+            text: text,
+            duration: 3000,
+            newWindow: true,
+            close: false,
+            gravity: "top", // `top` or `bottom`
+            position: "right", // `left`, `center` or `right`
+            stopOnFocus: true, // Prevents dismissing of toast on hover
+            style: {
+              background: "#2d2d2d",
+              boxShadow: "none"
+            }
+        }).showToast();
+    }
 }
 
 const notification = text => {
@@ -191,13 +186,13 @@ const notification = text => {
 }
 
 const covid19 = () => {
-    let amountToKill = Math.floor(people.length / 2) - 1
-    let dead = people.slice(0, amountToKill)
-    // deaths.push(...dead)
-    deaths += dead.length
-    people = dead
+    let elderly = people.filter(x => x.age >= 60)
+    people = people.filter(x => x.age <= 60)
+    deaths += elderly.length
 
-    notification(`🤢 Covid 19 just hit, Killing ${amountToKill} people!`)
+    console.log(elderly)
+
+    notification(`🤢 Covid 19 just killed ${elderly.length.toLocaleString()} people!`)
 }
 
 const worldWar = () => {
@@ -284,30 +279,24 @@ async function simulation() {
             }
         }
 
-        let newPeople = 0;
-        let passedAway = 0;
-
         for (index in people) {
             guy = people[index]
             
             if (guy != undefined) {
-                if (guy.age >= randomInt(65, 85)) {
+                if (guy.age >= randomInt(80, 95)) {
                     people = people.filter(x => x.name != guy.name)
                     // deaths.push(guy)
                     deaths += 1
-                    passedAway += 1;
+                    diedLastXYears += 1;
                 } else if (guy.age > randomInt(20, 28) && guy.age < randomInt(40, 50)) {
                     if (Math.random() < birthChance) {
                         newGuy = new Person(randomName(), 0, 0, 0)
                         people.push(newGuy)
-                        newPeople += 1
+                        bornLastXYears += 1
                     }
                 }
             }
         }
-
-        if (passedAway > 0) notification(`☠️ ${passedAway} people passed away today`)
-        if (newPeople > 0) notification(`💞 ${newPeople} people have just been born!`)
 
         // console.clear()
         // console.log(`Years passed: ${years}`)
