@@ -100,7 +100,7 @@ for (let i = 0; i < 5; i++) {
 }
 
 async function updateYears() {
-    if (running) {
+    if (running && people.length > 0) {
         years += 1
 
         for (index in people) {
@@ -242,7 +242,7 @@ const getAverageAge = () => {
 
 const endCard = (show) => {
     if (show) {
-        if (width >= 768) {
+        if (width > 768) {
             if (!theEndCard.classList.contains("show")) {
                 theEndCard.classList.remove("hide")
                 theEndCard.classList.add("show")
@@ -256,10 +256,10 @@ const endCard = (show) => {
             }
         }
     } else {
-        if (width >= 768) {
+        if (width > 768) {
             if (!theEndCard.classList.contains("hide")) {
                 theEndCard.classList.remove("show")
-                theEndCard.classList.add("hode")
+                theEndCard.classList.add("hide")
             }
         } else {
             if (!theEndCardMobile.classList.contains("hide")) {
@@ -273,17 +273,10 @@ const endCard = (show) => {
 }
 
 async function simulation() {
-    if (running) {
+    if (running && people.length > 0) {
         // if (speed < 100) {
         //     speed = 500
         // }
-
-        if (people.length <= 0) {
-            endCard(true)
-            resetSimulation()
-            stopSimulation()
-            setTimeout(() => {endCard(false)}, 3000)
-        }
 
         if (notifications >= 15) {
             while (updatesList.childNodes.length > 10) {
@@ -332,6 +325,11 @@ async function simulation() {
         currentTeenagersInput.innerText  = diffAgeStuff[1].length.toLocaleString()
         currentAdultsInput.innerText     = diffAgeStuff[2].length.toLocaleString()
         currentAverageAgeInput.innerText = getAverageAge().toLocaleString()
+    } else if (people.length <= 0) {
+        endCard(true)
+        stopSimulation()
+        resetSimulation()
+        setTimeout(() => {endCard(false)}, 3000)
     }
 
     setTimeout(simulation, speed/4)
@@ -446,11 +444,11 @@ const stopSimulation = () => {
 }
 
 const resetSimulation = () => {
-    if (theEndCard.classList.contains("show")) {
-        theEndCard.classList.add("hide")
-        theEndCard.classList.remove("show")
-        startSimulation();
-    }
+    // if (theEndCard.classList.contains("show")) {
+    //     theEndCard.classList.add("hide")
+    //     theEndCard.classList.remove("show")
+    //     startSimulation();
+    // }
 
     people  = []
     deaths  = 0

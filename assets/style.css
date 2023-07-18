@@ -137,6 +137,13 @@ body {
     background-color: #00000063;
 }
 
+.alert-danger {
+    --bs-alert-color: #ffecee!important;
+    --bs-alert-bg: #842c34!important;
+    --bs-alert-border-color: transparent!important;
+    --bs-alert-link-color: var(--bs-danger-text-emphasis);
+}
+
 @media screen and (min-width: 768px) {
     .custom-col {
         margin: 1rem .5rem;
